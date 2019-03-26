@@ -1,0 +1,41 @@
+CC=mingw32-gcc
+BIN=raycaster.exe
+BINDIR=bin
+OBJDIR=obj
+SRCDIR=src
+INCDIR=include
+BITMAPSRC=../common/bitmap/src
+BITMAPINC=../common/bitmap/include
+SYSSRC=../common/system/src
+SYSINC=../common/system/include
+DEPENDENCIES=main_win.o state.o render.o trig.o sys.o bitmap.o
+OBJS=$(OBJDIR)/main_win.o $(OBJDIR)/state.o $(OBJDIR)/render.o $(OBJDIR)/trig.o \
+$(OBJDIR)/sys.o $(OBJDIR)/bitmap.o
+DEBUG=
+CFLAGS=$(DEBUG) -I"$(INCDIR)" -I"$(BITMAPINC)" -I"$(SYSINC)"
+LDFLAGS=-mwindows
+
+$(BIN): $(DEPENDENCIES)
+	$(CC) $(LDFLAGS) $(OBJS) -o $(BINDIR)\$(BIN)
+
+main_win.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/main_win.c -o $(OBJDIR)/main_win.o
+
+state.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/state.c -o $(OBJDIR)/state.o
+
+render.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/render.c -o $(OBJDIR)/render.o
+
+trig.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/trig.c -o $(OBJDIR)/trig.o
+
+sys.o:
+	$(CC) $(CFLAGS) -c $(SYSSRC)/sys.c -o $(OBJDIR)/sys.o
+
+bitmap.o:
+	$(CC) $(CFLAGS) -c $(BITMAPSRC)/bitmap.c -o $(OBJDIR)/bitmap.o
+
+.PHONY: clean
+clean:
+	del /F /Q "$(OBJDIR)\*.*" "$(BINDIR)\$(BIN)"

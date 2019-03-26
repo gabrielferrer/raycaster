@@ -1,0 +1,43 @@
+CC=cc
+BIN=raycaster
+BINDIR=bin
+OBJDIR=obj
+SYSDIR=../common/system
+BMPDIR=../common/bitmap
+SRCDIR=src
+X11INCDIR=/usr/local/include/X11
+DEPENDENCIES=main_lin.o state.o render.o trig.o sys.o texture.o
+OBJS=$(OBJDIR)/main_lin.o $(OBJDIR)/state.o $(OBJDIR)/render.o $(OBJDIR)/trig.o \
+$(OBJDIR)/sys.o $(OBJDIR)/bitmap.o
+DEBUG=
+CFLAGS=$(DEBUG) -I$(SYSDIR)/include -I$(BMPDIR)/include -Iinclude -I$(X11INCDIR)
+LDFLAGS=-L/usr/lib -lm -lX11
+
+$(BIN): $(DEPENDENCIES)
+# IMPORTANTE: El lugar donde se encuentran los flags del linker (LDFLAGS) es
+# importante y debe ir despues de los objetos y despues del binario ya que
+# estos dependen de las librerias que pudiesen estar definidas en los flags.
+	$(CC) $(OBJS) -o $(BINDIR)/$(BIN) $(LDFLAGS)
+
+main_lin.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/main_lin.c -o $(OBJDIR)/main_lin.o
+
+state.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/state.c -o $(OBJDIR)/state.o
+
+render.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/render.c -o $(OBJDIR)/render.o
+
+trig.o:
+	$(CC) $(CFLAGS) -c $(SRCDIR)/trig.c -o $(OBJDIR)/trig.o
+
+sys.o:
+	$(CC) $(CFLAGS) -c $(SYSDIR)/src/sys.c -o $(OBJDIR)/sys.o
+
+texture.o:
+	$(CC) $(CFLAGS) -c $(BMPDIR)/src/bitmap.c -o $(OBJDIR)/bitmap.o
+
+.PHONY: clean
+clean:
+	rm $(OBJDIR)/*.o $(BINDIR)/$(BIN)
+
